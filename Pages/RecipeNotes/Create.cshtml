@@ -1,0 +1,49 @@
+﻿@page
+@model BakingBuddy.Pages.RecipeNotes.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Notes</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Notes.Date" class="control-label"></label>
+                <input asp-for="Notes.Date" class="form-control" />
+                <span asp-validation-for="Notes.Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes.ImageName" class="control-label"></label>
+                <input asp-for="Notes.ImageName" class="form-control" />
+                <span asp-validation-for="Notes.ImageName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes.RecipeName" class="control-label"></label>
+                <input asp-for="Notes.RecipeName" class="form-control" />
+                <span asp-validation-for="Notes.RecipeName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Notes.Note" class="control-label"></label>
+                <input asp-for="Notes.Note" class="form-control" />
+                <span asp-validation-for="Notes.Note" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

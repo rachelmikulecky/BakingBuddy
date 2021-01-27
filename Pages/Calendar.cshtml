@@ -1,0 +1,71 @@
+﻿@page
+@model CalendarModel
+@{
+    ViewData["Title"] = "Calendar";
+}
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="col-12 mt-3 mb-3">
+                <h2 class="text-center">To Cook</h2>
+            </div>
+            <form class="mb-2 padding" asp-page-handler="add" method="post">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="newToDo" placeholder="New Plan">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <ul class="list-group list-group-flush">
+                @foreach (var plan in Model.Plans.Reverse())
+                {
+                    <li class="list-group-item">
+                        <form asp-page-handler="delete" method="post">
+                            <a asp-page="/Recipe" asp-route-recipeName="@plan">
+                                <div class="input-group">
+
+                                    <input type="text" class="hidden form-control" name="toMake" value="@plan" readonly>
+
+                                    <div class="input-group-append">
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="fa fa-minus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </a>
+                        </form>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <h1 class="text-center">History</h1>
+                </div>
+
+                @foreach (var item in Model.Notes)
+                {
+                    <div class="col-sm-6 col-lg-4 col-xl-3 py-2">
+                        <div class="card h-100 mb-3">
+                            <div class="card-header">@item.Date.ToString("yyyy-MM-dd")</div>
+                            @if (item.ImageName != null)
+                            {
+                                <img class="card-img" src="~/assets/uploads/@item.ImageName" alt="@item.ImageName">
+
+                            }
+                            else
+                            {
+                                <div class="card-body">@item.RecipeName</div>
+                            }
+                            <a asp-page="/Recipe" asp-route-recipeName="@item.RecipeName" class="stretched-link"></a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

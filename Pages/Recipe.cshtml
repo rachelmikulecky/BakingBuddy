@@ -1,0 +1,168 @@
+﻿@page "{RecipeName}"
+@model RecipeModel
+@{
+    ViewData["Title"] = Model.RecipeName;
+}
+
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-md-4 col-12 mb-3">
+            <h1>@Model.RecipeName</h1>
+            @if (!string.IsNullOrWhiteSpace(Model.ActiveMin))
+            {
+                <h5>Active Minutes: @Model.ActiveMin</h5>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.InactiveMin))
+            {
+                <h5 asp-for="inactiveMin">Inactive Minutes: @Model.InactiveMin</h5>
+            }
+            @if (Model.SourceUri != null)
+            {
+                <h5>Source: <a href="@Model.SourceUri.AbsoluteUri">@Model.SourceUri.Host</a></h5>
+            }
+            else if (!string.IsNullOrWhiteSpace(Model.SourceString))
+            {
+                <h5>Source: @Model.SourceString</h5>
+            }
+            <div class="form-group row">
+                <h5 class="col-6 col-med-4">Scale: </h5>
+                <div class="col-6 col-med-4">
+                    <input type="text" onchange="convertToWeight()" class="form-control form-control" id="factor" placeholder="1">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-12 mb-3">
+            <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-info mt-3">Log this Meal</button> 
+            <form asp-page-handler="menu" method="post">
+                @if (Model.OnMenu)
+                {
+                    <button type="submit" class="btn btn-info mt-3">Remove from Menu</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-info mt-3">Add to Menu</button>
+                }
+            </form>
+            <a class="btn btn-warning mt-3" asp-page="/Create" asp-route-recipeName="@Model.RecipeName">Edit Recipe</a>
+        </div>
+        @if (Model.Images.Any())
+        {
+            <div class="col-md-4 col-12 mb-3">
+                <div id="carouselExampleControls" class="carousel" data-interval="false">
+                    <div class="carousel-inner">
+                        @foreach (var image in Model.Images)
+                        {
+                            var active = "";
+                            if (image == Model.Images.First())
+                            {
+                                active = "active";
+                            }
+                            <div class="carousel-item @active">
+                                <img src="~/assets/uploads/@image" class="d-block w-100" alt="...">
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-4">
+            <form asp-page-handler="weigh" method="post">
+                <h2 class="border-bottom">
+                    Ingredients
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fa fa-balance-scale"></i>
+                    </button>
+                </h2>
+            </form>
+            <div id="ingredients">
+                @foreach (var ingGroup in Model.IngredientGroups)
+                {
+                    if (!string.IsNullOrWhiteSpace(ingGroup.header))
+                    {
+                        <h5>@ingGroup.header</h5>
+                    }
+                    <ul>
+                        @foreach (var ing in ingGroup.list)
+                        {
+                            <li>@Html.Raw(ing)</li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+        <div class="col-12 col-md-8">
+            <h2 class="border-bottom">Instructions</h2>
+            @foreach (var ingGroup in Model.DirectionGroups)
+            {
+                if (!string.IsNullOrWhiteSpace(ingGroup.header))
+                {
+                    <h5>@ingGroup.header</h5>
+                }
+                <ol>
+                    @foreach (var ing in ingGroup.list)
+                    {
+                        <li>@ing</li>
+                    }
+                </ol>
+            }
+        </div>
+    </div>
+    <div class="row border-top">
+        <div class="col-12">
+            <h3><a asp-page="RecipeNotes/Index">Notes</a></h3>
+            @foreach (var note in Model.RecipeNotes)
+            {
+                <div class="card mb-3">
+                    <div class="card-header">@note.Date.ToString("yyyy-MM-dd")</div>
+
+                    <div class="row no-gutters">
+                        @if (!string.IsNullOrWhiteSpace(note.ImageName))
+                        {
+                            <div class="col-md-4">
+                                <img class="card-img" src="~/assets/uploads/@note.ImageName" alt="@note.ImageName">
+                            </div>
+                        }
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="card-text">@note.Note</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@Model.RecipeName</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <input type="date" name="date" class="form-control mb-2" value="@DateTime.Now.Date.ToString("yyyy-MM-dd")" />
+                    <input type="file" asp-for="Upload" accept="image/*" class="form-control-file mb-2" />
+                    <textarea name="notes" class="form-control mb-2" rows="5"></textarea>
+                </div>
+                <div class="modal-footer text-center">
+                    <button type="submit" class="btn btn-primary">Log Meal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

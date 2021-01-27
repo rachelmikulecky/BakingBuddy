@@ -1,0 +1,82 @@
+﻿@page "{recipeName?}"
+@model CreateModel
+@{
+    ViewData["Title"] = "New Recipe";
+}
+@section scripts{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<div class="container">
+    <h1 class="mt-5">Add a New Recipe</h1>
+    <form method="post">
+        <div class="form-group">
+            <label for="name">Recipe Name: </label>
+            <input type="text" class="form-control" asp-for="RecipeName">
+        </div>
+        <div class="row">
+            <div class="form-group col">
+                <label for="active">Active Minutes: </label>
+                <input type="number" class="form-control" name="active" value="@Model.ActiveMin">
+            </div>
+            <div class="form-group col">
+                <label for="inactive">Inactive Minutes: </label>
+                <input type="number" class="form-control" name="inactive" value="@Model.InactiveMin">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="source">Source: </label>
+            <input type="text" class="form-control" name="source" value="@Model.Source">
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-4 form-group">
+                <label for="ingredients">Ingredients: </label>
+                <textarea class="form-control mb-2" rows="25" name="ingredients">
+                @foreach(var group in Model.IngredientGroups)
+                {
+                    @group.header
+                    @foreach(var line in group.list)
+                    {
+                        @line
+                    }
+                }
+                </textarea>
+            </div>
+            <div class="col-12 col-md-8">
+                <label for="directions">Directions: </label>
+                <textarea class="form-control mb-2" rows="25" name="directions">
+                @foreach(var group in Model.DirectionGroups)
+                {
+                    @group.header
+                    @foreach(var line in group.list)
+                    {
+                        @line
+                    }
+                }
+                </textarea>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit Recipe</button>
+    </form>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Spaghetti</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="date" class="form-control mb-2" value="2018-07-22" />
+                <input type="file" class="form-control-file mb-2" />
+                <textarea class="form-control mb-2" rows="5"></textarea>
+            </div>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-primary">Log Meal</button>
+            </div>
+        </div>
+    </div>
+</div>
