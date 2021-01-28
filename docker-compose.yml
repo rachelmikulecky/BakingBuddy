@@ -1,0 +1,13 @@
+services:
+  bakingbuddy:
+    container_name: bakingbuddy
+    image: bakingbuddy
+    volumes:
+      - /wwwroot/assets
+      - /wwwroot/files
+      - MvcNotes.db
+    ports:
+      - "23516:23516"
+    build:
+      context: ./
+      dockerfile: Dockerfile

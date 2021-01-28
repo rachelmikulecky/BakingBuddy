@@ -2,21 +2,43 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>.</DockerfileContext>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="wwwroot\assets\mixer.png" />
+    <None Include="wwwroot\files\conversions.md" />
+    <None Include="wwwroot\files\plan.md" />
+    <None Include="wwwroot\files\recipes\123.md" />
+    <None Include="wwwroot\files\recipes\1234.md" />
+    <None Include="wwwroot\files\recipes\baked beans.md" />
+    <None Include="wwwroot\files\recipes\Bánh Tráng Nướng %28Grilled Vietnamese Rice Paper With Egg, Pork, and Condiments%29 Recipe.md" />
+    <None Include="wwwroot\files\recipes\corn.md" />
+    <None Include="wwwroot\files\recipes\Fruitcake.md" />
+    <None Include="wwwroot\files\recipes\Instant Pot® Teriyaki Chicken Wings.md" />
+    <None Include="wwwroot\files\recipes\Italian-Style Tuna Salad.md" />
+    <None Include="wwwroot\files\recipes\JJ%27s Fruitcake.md" />
+    <None Include="wwwroot\files\recipes\junk food.md" />
+    <None Include="wwwroot\files\recipes\Mississippi Queen inspired by Regular Show.md" />
+    <None Include="wwwroot\files\recipes\potato.md" />
+    <None Include="wwwroot\files\recipes\Risotto Tricolore inspired by Big Night.md" />
+    <None Include="wwwroot\files\recipes\Testing.md" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="files\recipes\" />
     <Folder Include="wwwroot\assets\uploads\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.10" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

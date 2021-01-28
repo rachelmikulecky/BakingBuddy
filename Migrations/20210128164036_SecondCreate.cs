@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BakingBuddy.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class SecondCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,12 +11,12 @@ namespace BakingBuddy.Migrations
                 name: "Notes",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(nullable: false),
-                    ImageName = table.Column<string>(nullable: true),
-                    RecipeName = table.Column<string>(nullable: true),
-                    Note = table.Column<string>(nullable: true)
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    ImageName = table.Column<string>(type: "TEXT", nullable: true),
+                    RecipeName = table.Column<string>(type: "TEXT", nullable: true),
+                    Note = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {

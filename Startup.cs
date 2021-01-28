@@ -38,7 +38,7 @@ namespace BakingBuddy
 
 
             services.AddDbContext<BakingBuddyContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BakingBuddyContext")));
+                    options.UseSqlite(Configuration.GetConnectionString("BakingBuddyContext")));
 
         }
 

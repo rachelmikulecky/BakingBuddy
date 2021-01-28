@@ -17,10 +17,10 @@ namespace BakingBuddy.Pages
         public const string ingredientHeader = @"## Ingredients";
         public const string directionsHeader = @"## Directions";
 
-        public const string fileLocation = @"files/";
-        public const string recipeLocation = @"files/recipes/";
-        public const string conversionFileLocation = @"files/conversions.md";
-        public const string planFileLocation = @"files/plan.md";
+        public const string fileLocation = @"wwwroot/files/";
+        public const string recipeLocation = @"wwwroot/files/recipes/";
+        public const string conversionFileLocation = @"wwwroot/files/conversions.md";
+        public const string planFileLocation = @"wwwroot/files/plan.md";
 
         // Given the lines of the ingredients/directions, populate IngredientGroups/DirectionGroups respectively
         public static List<ListWithHeaders> GetIngredientOrDirectionGroups(List<string> group, string startsWith)
