@@ -49,10 +49,14 @@ namespace BakingBuddy.Pages
 
                 var ingredients = lines.Skip(ingHeaderLoc + 1).Take(dirHeaderLoc - ingHeaderLoc - 1).ToList();
                 IngredientGroups = Common.GetIngredientOrDirectionGroups(ingredients, @"^\* ");
-
                 var directions = lines.Skip(dirHeaderLoc + 1).ToList();
                 DirectionGroups = Common.GetIngredientOrDirectionGroups(directions, @"^\d+\. ");
             
+            }
+            if(IngredientGroups.Count() == 0)
+            {
+                IngredientGroups = null;
+                DirectionGroups = null;
             }
         }
         public void OnPost(string recipeName, int active, int inactive, string source, string ingredients, string directions)
@@ -63,11 +67,11 @@ namespace BakingBuddy.Pages
                 $"# {recipeName}"
             };
             // Active Minutes
-            active = active > 0 ? active : 0;
-            file.Add(Common.activeMinFormat + active);
+            string activeString = active > 0 ? active.ToString() : "";
+            file.Add(Common.activeMinFormat + activeString);
             // Inactive Minutes
-            inactive = inactive > 0 ? inactive : 0;
-            file.Add(Common.inactiveMinFormat + inactive);
+            string inactiveString = inactive > 0 ? inactive.ToString() : "";
+            file.Add(Common.inactiveMinFormat + inactiveString);
             // Source
             Uri uriResult;
             bool sourceIsURI = Uri.TryCreate(source, UriKind.Absolute, out uriResult)

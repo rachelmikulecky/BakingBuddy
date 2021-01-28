@@ -31,29 +31,44 @@
         <div class="row">
             <div class="col-12 col-md-4 form-group">
                 <label for="ingredients">Ingredients: </label>
-                <textarea class="form-control mb-2" rows="25" name="ingredients">
-                @foreach(var group in Model.IngredientGroups)
+                @if (Model.IngredientGroups == null)
                 {
-                    @group.header
-                    @foreach(var line in group.list)
-                    {
-                        @line
-                    }
+                    <textarea class="form-control mb-2" rows="25" name="ingredients"></textarea>
                 }
-                </textarea>
+                else
+                {
+                    <textarea class="form-control mb-2" rows="25" name="ingredients">
+                    @foreach(var group in Model.IngredientGroups)
+                    {
+                        @group.header 
+                        @foreach(var line in group.list)
+                        {
+                            @line
+                        }
+                    }
+                    </textarea>
+                }
+
             </div>
             <div class="col-12 col-md-8">
                 <label for="directions">Directions: </label>
-                <textarea class="form-control mb-2" rows="25" name="directions">
-                @foreach(var group in Model.DirectionGroups)
+                @if (Model.DirectionGroups == null)
                 {
-                    @group.header
-                    @foreach(var line in group.list)
-                    {
-                        @line
-                    }
+                    <textarea class="form-control mb-2" rows="25" name="directions"></textarea>
                 }
-                </textarea>
+                else
+                {
+                    <textarea class="form-control mb-2" rows="25" name="directions">
+                    @foreach (var group in Model.DirectionGroups)
+                    {
+                        @group.header
+                        @foreach (var line in group.list)
+                        {
+                            @line
+                        }
+                    }
+                    </textarea>
+                }
             </div>
         </div>
         <button type="submit" class="btn btn-secondary btn-lg btn-block">Submit Recipe</button>

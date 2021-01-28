@@ -43,7 +43,6 @@ namespace BakingBuddy.Pages
                 var formattedIng = ingredient.Trim().ToLower();
                 formattedIng = formattedIng[0].ToString().ToUpper() + formattedIng.Substring(1);
                 // Add to file if new
-                Console.WriteLine(formattedIng);
                 if (!Conversions.ContainsKey(formattedIng))
                 {
                     Conversions.Add(formattedIng, new Conversion(unit, weight.ToString()));

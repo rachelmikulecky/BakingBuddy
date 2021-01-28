@@ -40,8 +40,9 @@ namespace BakingBuddy.Pages
                     // Headers end with a colon
                     if (subGroup.First().EndsWith(':'))
                     {
-                        header = subGroup.First() + "\n";
+                        header = subGroup.First();
                         subGroup.Remove(header);
+                        header += "\n";
                     }
                     // Remove the leading values
                     // They make the md prettier, but are not used
