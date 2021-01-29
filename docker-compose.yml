@@ -3,9 +3,7 @@ services:
     container_name: bakingbuddy
     image: bakingbuddy
     volumes:
-      - /wwwroot/assets
-      - /wwwroot/files
-      - Database/RecipeNotes.db
+      - /webapp/volume_data
     ports:
       - "23516:23516"
     build:

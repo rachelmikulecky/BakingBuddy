@@ -6,6 +6,10 @@ WORKDIR /webapp
 
 COPY /webapp /webapp
 
+RUN mv /webapp/wwwroot/assets/uploads /webapp/volume_data/
+
+RUN ln -s /webapp/volume_data/uploads/ /webapp/wwwroot/assets/uploads
+
 EXPOSE 23516/tcp
 
 ENV ASPNETCORE_URLS http://*:23516
