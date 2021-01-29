@@ -5,7 +5,7 @@ services:
     volumes:
       - /wwwroot/assets
       - /wwwroot/files
-      - MvcNotes.db
+      - Database/RecipeNotes.db
     ports:
       - "23516:23516"
     build:

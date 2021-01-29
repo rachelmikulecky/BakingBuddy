@@ -249,15 +249,27 @@ namespace BakingBuddy.Pages
                 imageName = null;
             }
 
-
-            _context.Notes.Add(new Models.Notes
+            Models.Notes existingNote = null;
+            try
             {
-                RecipeName = recipeName,
-                Note = notes,
-                Date = date,
-                ImageName = imageName
-            });
-            _context.SaveChanges();
+                existingNote = _context.Notes.Single(e => e.RecipeName == recipeName && e.Date == date);
+                existingNote.Note = notes;
+                existingNote.ImageName = imageName;
+                _context.Attach(existingNote).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            catch
+            {
+                _context.Notes.Add(new Models.Notes
+                {
+                    RecipeName = recipeName,
+                    Note = notes,
+                    Date = date,
+                    ImageName = imageName
+                });
+                _context.SaveChanges();
+            }
+
             await OnGetAsync(recipeName);
         }
 
