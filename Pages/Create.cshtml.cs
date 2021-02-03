@@ -51,11 +51,14 @@ namespace BakingBuddy.Pages
                 IngredientGroups = Common.GetIngredientOrDirectionGroups(ingredients, @"^\* ");
                 var directions = lines.Skip(dirHeaderLoc + 1).ToList();
                 DirectionGroups = Common.GetIngredientOrDirectionGroups(directions, @"^\d+\. ");
-            
+
             }
-            if(IngredientGroups.Count() == 0)
+            if (IngredientGroups.Count() == 0)
             {
                 IngredientGroups = null;
+            }
+            if (DirectionGroups.Count() == 0)
+            {
                 DirectionGroups = null;
             }
         }

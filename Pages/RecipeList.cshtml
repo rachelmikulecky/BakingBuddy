@@ -22,7 +22,7 @@
         </div>
     </form>
     <div class="row">
-        @foreach (var recipe in Model.Recipes)
+        @foreach (var recipe in Model.Recipes.OrderBy(i => i))
         {
             <div class="col-md-4 col-12 text-center">
                 <a asp-page="/Recipe" asp-route-recipeName="@recipe">@recipe</a>
