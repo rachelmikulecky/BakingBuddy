@@ -1,7 +1,5 @@
 # BakingBuddy
 
-## What is BakingBuddy?
-
 BakingBuddy is a self-hosted personal recipe web application. It was created with Docker, C#, and the .NET Core framework. 
 
 Features:
@@ -105,7 +103,7 @@ Clone this repository and after making the desired changes run the following
 ```shell
 dotnet publish -c release -o webapp
 docker-compose build
-docker-compose up
+docker-compose up -d
 ```
 
 Once the image has been created, push your image to Docker Hub via [these instructions](https://ropenscilabs.github.io/r-docker-tutorial/04-Dockerhub.html)
