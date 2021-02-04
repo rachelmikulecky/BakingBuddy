@@ -7,32 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\assets\mixer.png" />
-    <None Include="volume_data\recipes\123.md" />
-    <None Include="volume_data\recipes\1234.md" />
-    <None Include="volume_data\recipes\baked beans.md" />
-    <None Include="volume_data\recipes\Bánh Tráng Nướng %28Grilled Vietnamese Rice Paper With Egg, Pork, and Condiments%29 Recipe.md" />
-    <None Include="volume_data\recipes\corn.md" />
-    <None Include="volume_data\recipes\Fruitcake.md" />
-    <None Include="volume_data\recipes\Instant Pot® Teriyaki Chicken Wings.md" />
-    <None Include="volume_data\recipes\Italian-Style Tuna Salad.md" />
-    <None Include="volume_data\recipes\JJ%27s Fruitcake.md" />
-    <None Include="volume_data\recipes\junk food.md" />
-    <None Include="volume_data\recipes\Mississippi Queen inspired by Regular Show.md" />
-    <None Include="volume_data\recipes\potato.md" />
-    <None Include="volume_data\recipes\Risotto Tricolore inspired by Big Night.md" />
-    <None Include="volume_data\recipes\Testing.md" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="wwwroot\assets\uploads\" />
   </ItemGroup>
 
   <ItemGroup> 
-  <Content Include="volume_data\**"> 
-    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
-  </Content> 
-</ItemGroup>
+    <Content Include="volume_data\**"> 
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory> 
+    </Content> 
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
