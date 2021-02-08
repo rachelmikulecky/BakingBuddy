@@ -9,6 +9,8 @@ namespace BakingBuddy.Pages
 {
     public static class Common
     {
+        public const string VERSION = "1.0.2";
+
         public const string activeMinFormat = @"active: ";
         public const string inactiveMinFormat = @"inactive: ";
         public const string sourceUriFormat = @"[source](";
@@ -58,6 +60,12 @@ namespace BakingBuddy.Pages
 
             }
             return NewGroup;
+        }
+
+
+        public static void DeleteFile(string fileName)
+        {
+            File.Delete(fileName);
         }
 
         public static List<string> ReadFile(string fileName)

@@ -328,5 +328,12 @@ namespace BakingBuddy.Pages
                 }
             }
         }
+
+        public IActionResult OnPostDelete(string recipeName)
+        {
+            Common.DeleteFile($"{Common.recipeLocation}{recipeName}.md");
+            return RedirectToPage("/RecipeList");
+        }
+
     }
 }

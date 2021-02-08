@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="col-md-4 col-12 mb-3">
-            <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-info mt-3">Log this Meal</button> 
+            <button type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-info mt-3">Log this Meal</button>
             <form asp-page-handler="menu" method="post">
                 @if (Model.OnMenu)
                 {
@@ -43,7 +43,9 @@
                     <button type="submit" class="btn btn-info mt-3">Add to Menu</button>
                 }
             </form>
+            <button type="button" data-toggle="modal" data-target="#confirmModal" class="btn btn-danger mt-3">Delete Recipe</button>
             <a class="btn btn-warning mt-3" asp-page="/Create" asp-route-recipeName="@Model.RecipeName">Edit Recipe</a>
+
         </div>
         @if (Model.Images.Any())
         {
@@ -161,6 +163,24 @@
                 </div>
                 <div class="modal-footer text-center">
                     <button type="submit" class="btn btn-primary">Log Meal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete @Model.RecipeName?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-page-handler="delete" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
                 </div>
             </form>
         </div>
