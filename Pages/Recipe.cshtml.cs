@@ -76,10 +76,30 @@ namespace BakingBuddy.Pages
         {
             Regex startsWithDigit = new Regex(@"^\d");
             // all valid volume values
-            Regex amount = new Regex(@"^(\d+\/\d+|\d+\.\d+|\d+)-(\d+\/\d+|\d+\.\d+|\d+)|\d+\/\d+|\d+\.\d+|to|\d+$");
+            Regex amount = new Regex(@"^(\d+\/\d+|\d+\.\d+|\d+)-(\d+\/\d+|\d+\.\d+|\d+)|\d+\/\d+|\d+\.\d+|to|-|\d+$");
+            Regex weight = new Regex(@"\((.*)g\s?\)", RegexOptions.IgnoreCase);
             Regex cup = new Regex(@"^cups?$", RegexOptions.IgnoreCase);
             Regex tbsp = new Regex(@"^((tablespoon)|(tbsp))s?$", RegexOptions.IgnoreCase);
             Regex tsp = new Regex(@"^((teaspoon)|(tsp))s?$", RegexOptions.IgnoreCase);
+
+            // Check that it doesn't already have weight
+            var weightMatch = weight.Match(line);
+            if (weightMatch.Success)
+            {
+                var matchesWeightFully = true;
+                var weightParts = weightMatch.Groups[1].Value.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                foreach (var wp in weightParts)
+                {
+                    if (!amount.IsMatch(wp))
+                    {
+                        matchesWeightFully = false;
+                        break;
+                    }
+                }
+                if (matchesWeightFully) return "";
+
+            }
+
 
             // Separate by the first , that's additional directions
             var index = line.IndexOf(",");
@@ -90,14 +110,14 @@ namespace BakingBuddy.Pages
             if (!startsWithDigit.IsMatch(start)) return "";
             
             // Consider the values individually
-            var parts = start.Split(" ");
+            var parts = start.Split(" ", StringSplitOptions.RemoveEmptyEntries);
             int p = 0;
             // We could be dealing with a range
             decimal firstValue = 0, secondValue = 0;
             bool readingFirstValue = true;
             while (amount.IsMatch(parts[p]))
             {
-                if (parts[p] == "to" | secondValue > 0)
+                if (parts[p] == "to" | parts[p] == "-" | secondValue > 0)
                 {
                     readingFirstValue = false;
                 }
@@ -134,6 +154,13 @@ namespace BakingBuddy.Pages
             firstValue *= teaspoons;
             secondValue *= teaspoons;
 
+            // Stitch the regular measurements together
+            var normalMeasurements = "";
+            for (var d = 0; d <= p; ++d)
+            {
+                normalMeasurements += parts[d] + " ";    
+            }
+
             // Stitch the rest of the line together
             // It describes the ingredient type
             var foodType = "";
@@ -143,29 +170,28 @@ namespace BakingBuddy.Pages
             }
             // If a conversion food is found within the food type
             // Consider it a match and convert
-            var inConversion = false;
+            (string, decimal) bestMatch = ("", 0);
             foreach (var tup in conversionList)
             {
-                if (foodType.Contains(tup.Item1, StringComparison.OrdinalIgnoreCase))
-                {
-                    firstValue *= tup.Item2;
-                    secondValue *= tup.Item2;
-                    inConversion = true;
-                    break;
+                if (foodType.Contains(tup.Item1, StringComparison.OrdinalIgnoreCase) && tup.Item1.Length > bestMatch.Item1.Length){
+                    bestMatch = tup;
                 }
             }
 
             // Ingredient must be listed in the conversion chart
-            if (!inConversion) return "";
+            if (bestMatch.Item2 == 0) return "";
+            firstValue *= bestMatch.Item2;
+            secondValue *= bestMatch.Item2;
+
 
             // Stitch back to a raw html line
             // Bold any changes
             if (secondValue == 0)
             {
-                return $"<b>{string.Format("{0:0.##}", firstValue)} g </b>{foodType}{end}";
+                return $"{normalMeasurements} <b>({string.Format("{0:0.##}", firstValue)} g)</b> {foodType}{end}";
 
             }
-            return $"<b>{string.Format("{0:0.##}", firstValue)} to {string.Format("{0:0.##}", secondValue)} g </b>{foodType}{end}";
+            return $"{normalMeasurements} <b>({string.Format("{0:0.##}", firstValue)} to {string.Format("{0:0.##}", secondValue)} g)</b> {foodType}{end}";
 
         }
 
@@ -173,10 +199,12 @@ namespace BakingBuddy.Pages
         {
             RecipeName = recipeName;
 
+            // Check if recipe is on the menu
             var menu = Common.ReadFile(Common.planFileLocation);
             var plans = new HashSet<string>(menu, StringComparer.OrdinalIgnoreCase);
             OnMenu = plans.Contains(recipeName);
 
+            // Read in recipe
             var lines = Common.ReadFile($"{Common.recipeLocation}{recipeName}.md");
 
             if (lines.Count == 0)
@@ -210,6 +238,46 @@ namespace BakingBuddy.Pages
                 var directions = lines.Skip(dirHeaderLoc + 1).ToList();
                 DirectionGroups = Common.GetIngredientOrDirectionGroups(directions, @"^\d+\. ");
 
+                // Get conversions
+                lines = Common.ReadFile(Common.conversionFileLocation);
+                List<(string, decimal)> conversionList = new List<(string, decimal)>();
+                foreach (var line in lines)
+                {
+                    string[] values = line.Split(',');
+                    var ingredient = values[0];
+                    var unit = values[1];
+                    var weight = values[2];
+
+                    decimal conversion = 0;
+                    switch (unit)
+                    {
+                        case "cup":
+                            conversion = decimal.Parse(weight) / 48;
+                            break;
+                        case "tbsp":
+                            conversion = decimal.Parse(weight) / 3;
+                            break;
+                        case "tsp":
+                            conversion = decimal.Parse(weight);
+                            break;
+                    }
+                    conversionList.Add((ingredient, conversion));
+                }
+
+                // Calculate weights
+                for (var g = 0; g < IngredientGroups.Count; ++g)
+                {
+                    for (var i = 0; i < IngredientGroups[g].list.Count; ++i)
+                    {
+                        var newLine = GetWeighLine(IngredientGroups[g].list[i], conversionList);
+                        if (newLine != "")
+                        {
+                            IngredientGroups[g].list[i] = newLine;
+                        }
+                    }
+                }
+
+                // Get notes
                 var notes = from m in _context.Notes
                             where (m.RecipeName == recipeName)
                             select m;
@@ -286,54 +354,5 @@ namespace BakingBuddy.Pages
 
             await OnGetAsync(recipeName);
         }
-        
-        public async Task OnPostWeigh(string recipeName)
-        {
-            await OnGetAsync(recipeName);
-
-            var lines = Common.ReadFile(Common.conversionFileLocation);
-            List<(string, decimal)> conversionList = new List<(string, decimal)>();
-            foreach (var line in lines)
-            {
-                string[] values = line.Split(',');
-                var ingredient = values[0];
-                var unit = values[1];
-                var weight = values[2];
-
-                decimal conversion = 0;
-                switch (unit)
-                {
-                    case "Cup":
-                        conversion = decimal.Parse(weight) / 48;
-                        break;
-                    case "Tbsp":
-                        conversion = decimal.Parse(weight) / 3;
-                        break;
-                    case "Tsp":
-                        conversion = decimal.Parse(weight);
-                        break;
-                }
-                conversionList.Add((ingredient, conversion));
-            }
-
-            for (var g = 0; g < IngredientGroups.Count; ++g)
-            {
-                for (var i = 0; i < IngredientGroups[g].list.Count; ++i)
-                {
-                    var newLine = GetWeighLine(IngredientGroups[g].list[i], conversionList);
-                    if(newLine != "")
-                    {
-                        IngredientGroups[g].list[i] = newLine;
-                    }
-                }
-            }
-        }
-
-        public IActionResult OnPostDelete(string recipeName)
-        {
-            Common.DeleteFile($"{Common.recipeLocation}{recipeName}.md");
-            return RedirectToPage("/RecipeList");
-        }
-
     }
 }

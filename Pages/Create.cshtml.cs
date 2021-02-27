@@ -121,7 +121,8 @@ namespace BakingBuddy.Pages
                                     .Replace("⅛", "1/8")
                                     .Replace("⅜", "3/8")
                                     .Replace("⅝", "5/8")
-                                    .Replace("⅞", "7/8");
+                                    .Replace("⅞", "7/8")
+                                    .Replace("\x2009", " ");
                         line = $"{lineStart}{line}";
                         m = Regex.Match(line, @"^\*");
                         // If the line doesn't have a star, have an empty line preceding
@@ -194,6 +195,12 @@ namespace BakingBuddy.Pages
 
             Response.Redirect($"/Recipe/{recipeName}");
 
+        }
+
+        public IActionResult OnPostDelete(string recipeName)
+        {
+            Common.DeleteFile($"{Common.recipeLocation}{recipeName}.md");
+            return RedirectToPage("/Index");
         }
     }
 }

@@ -14,8 +14,10 @@ namespace BakingBuddy.Pages
     {
         public IndexModel(){}
 
+        public List<string> Recipes { get; private set; }
+
         [Required]
-        public int Weight { get; set; }
+        public double Weight { get; set; }
         [Required]
         public string Ingredient { get; set; }
         [Required]
@@ -32,10 +34,21 @@ namespace BakingBuddy.Pages
                 Conversions.Add(entry.Item1, entry.Item2);
             }
         }
-        public void OnGet(string ingredient, string unit, int weight)
+
+        private void UpdateRecipes()
         {
+            Recipes = Directory.GetFiles(Common.recipeLocation, "*.md", SearchOption.TopDirectoryOnly)
+                    .Select(Path.GetFileNameWithoutExtension)
+                    .ToList();
+        }
+
+        public void OnGet(string search, string ingredient, string unit, double weight)
+        {
+            UpdateRecipes();
             GetConversions();
 
+            Recipes = Recipes.Where(i => i.Contains(search ?? "", StringComparison.OrdinalIgnoreCase)).ToList();
+            
             // If values are valid
             if (ingredient != null && weight > 0)
             {
@@ -57,10 +70,10 @@ namespace BakingBuddy.Pages
             }
         }
 
-        public IActionResult OnPost(string ingredient, string unit, int weight)
+        public IActionResult OnPost(string search, string ingredient, string unit, double weight)
         {
             // Post - Redirect - Get
-            return RedirectToPage("", new { ingredient, unit, weight });
+            return RedirectToPage("", new { search, ingredient, unit, weight });
         }
     }
 }

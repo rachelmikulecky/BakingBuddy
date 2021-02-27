@@ -49,8 +49,8 @@
 
                 @foreach (var item in Model.Notes)
                 {
-                    <div class="col-sm-6 col-lg-4 col-xl-3 py-2">
-                        <div class="card h-100 mb-3">
+                    <div class="col-sm-6 col-lg-4 col-xl-3 small-padding">
+                        <div class="card card-hover h-100 mb-3">
                             <div class="card-header">@item.Date.ToString("yyyy-MM-dd")</div>
                             @if (item.ImageName != null)
                             {

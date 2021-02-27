@@ -9,28 +9,88 @@
 
 <div class="container">
     <div class="row mt-5">
-        <div class="col align-self-center">
-            <h1>Ingredient Weight Chart</h1>
+        <div class="col-12 col-sm-6 align-self-center">
+            <h1 class="text-center">Welcome to Baking Buddy</h1>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-sm-6">
             <img src="~/assets/couple.jpg" class="rounded img-fluid" alt="couple cooking">
 
         </div>
     </div>
-    <form class="form-inline mb-5 needs-validation" method="post">
-        <div class="row">
-            <div class="col-auto">
-                <input type="text" class="form-control" asp-for="Ingredient" placeholder="Ingredient Name" value="">
+    <div class="row">
+        <div class="col">
+            <h3 class="text-center">Recipes</h3>
+        </div>
+    </div>
+    <form class="mt-5 mb-5" method="post">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10 col-12 input-group">
+                <input type="text" class="form-control" name="search" placeholder="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
             </div>
-            <div class="col-auto">
-                <select class="custom-select" asp-for="Unit">
+        </div>
+    </form>
+
+    <div class="row justify-content-md-center">
+
+        @foreach (var recipe in Model.Recipes.OrderBy(i => i))
+        {
+            <div class="col-12 col-md-6 col-lg-4 small-padding">
+                <div class="card card-hover h-100">
+                    <div class="card-body text-center">
+                        <h6>@recipe</h6>
+                        <a asp-page="/Recipe" asp-route-recipeName="@recipe" class="stretched-link"></a>
+                    </div>
+                </div>
+
+            </div>
+        }
+    </div>
+
+    <div class="row mt-5 mb-5">
+        <div class="col">
+            <h3 class="text-center">Ingredient Weight Chart</h3>
+        </div>
+    </div>
+    <div class="row justify-content-md-center">
+        <table class="table table-striped table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">Ingredient</th>
+                    <th scope="col">Volume</th>
+                    <th scope="col">Mass</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Conversions.OrderBy(i => i.Key))
+                {
+                    <tr>
+                        <td>@item.Key</td>
+                        <td>1 @item.Value.unit</td>
+                        <td>@item.Value.weight g</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <form class="form-inline mt-5 mb-5 needs-validation" method="post">
+        <div class="row w-100">
+            <div class="col-8 col-md-4 w-100">
+                <input type="text" class="form-control w-100" asp-for="Ingredient" placeholder="Ingredient Name" value="">
+            </div>
+            <div class="col-4 col-md-2 w-100">
+                <select class="custom-select w-100" asp-for="Unit">
                     <option disabled selected>Unit</option>
-                    <option value="Cup">Cup</option>
-                    <option value="Tbsp">Tbsp</option>
-                    <option value="Tsp">Tsp</option>
+                    <option value="cup">cup</option>
+                    <option value="tbsp">tbsp</option>
+                    <option value="tsp">tsp</option>
                 </select>
             </div>
-            <div class="col-auto">
+            <div class="col-8 col-md-4 w-100">
                 <div class="input-group">
                     <input type="text" class="form-control" asp-for="Weight" placeholder="Weight" value="">
                     <div class="input-group-append">
@@ -38,21 +98,24 @@
                     </div>
                 </div>
             </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Add</button>
+            <div class="col-4 col-md-2 w-100">
+                <button type="submit" class="btn btn-primary w-100">Add</button>
             </div>
         </div>
     </form>
-    <div class="row justify-content-md-center">
-        @foreach (var item in Model.Conversions.OrderBy(i=> i.Key))
+
+    <!--<div class="row justify-content-md-center">
+
+        @foreach (var item in Model.Conversions.OrderBy(i => i.Key))
         {
-            <div class="col-lg-4 col-md-6 col-12 border-left border">
-                <div class="row text-center m-2">
-                    <div class="col align-self-center">@item.Key</div>
-                    <div class="col align-self-center">1 @item.Value.unit</div>
-                    <div class="col align-self-center">@item.Value.weight g</div>
-                </div>
+            <div class="col-12 col-md-6 col-lg-4 small-padding">
+                    <ul class="list-group list-group-horizontal h-100">
+                            <li class="list-group-item w-100 text-center">@item.Key</li>
+                            <li class="list-group-item w-100 text-center">1 @item.Value.unit</li>
+                            <li class="list-group-item w-100 text-center">@item.Value.weight g</li>
+                    </ul>
             </div>
         }
-    </div>
+    </div>-->
+
 </div>

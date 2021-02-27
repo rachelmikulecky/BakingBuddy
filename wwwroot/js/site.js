@@ -6,6 +6,7 @@
 const denominators = [2, 3, 4, 6, 8, 16];
 // Have to double escape any special character
 const startsWithDigit = new RegExp('^\\d');
+const paren = new RegExp('^([\\s\\S]*)\\(([\\s\\S]*)\\)([\\s\\S]*)$');
 const fraction = new RegExp("^(\\d+\\s)?(\\d+\\/\\d+)([\\s\\S]*)");
 const decimal = new RegExp("^(\\d+\\.\\d+)([\\s\\S]*)");
 const integer = new RegExp("^(\\d+)([\\s\\S]*)");
@@ -121,7 +122,7 @@ function numberFactor(factor, line) {
     return newLine;
 }
 
-function convertToWeight() {
+function scaleIngredients() {
     var ing = document.getElementById("ingredients").innerHTML;
     // Remove any previous bolded elements
     ing = ing.replace(/<b>/g, "");
@@ -153,7 +154,8 @@ function convertToWeight() {
                 li[i] = numberFactor(factor, li[i]);
             }
         }
-
+        // Update any values inside parentheses
+        li[i] = updateParen(factor, li[i]);
     }
     // Replace with new content
     var newIng = li[0];
@@ -165,3 +167,17 @@ function convertToWeight() {
 }
 
 
+function updateParen(factor, line) {
+    if (paren.test(line)) {
+        var inParen = line.match(paren);
+        var inParenSplit = inParen[2].split(" ");
+        var newInside = "";
+        for (var j = 0; j < inParenSplit.length; ++j) {
+            var temp = numberFactor(factor, inParenSplit[j]);
+            if (temp) inParenSplit[j] = temp;
+            newInside += inParenSplit[j] + " ";
+        }
+        return updateParen(factor, inParen[1]) + '(' +  newInside.trim() + ')' + updateParen(factor, inParen[3]);
+    }
+    return line;
+}

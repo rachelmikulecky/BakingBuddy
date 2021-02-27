@@ -18,6 +18,18 @@ li.no-bullets {
     padding: 0;
 }
 
+.inline{
+    display: inline;
+}
+.small-padding {
+    padding: 0.25em !important;
+    margin: 0 !important;
+}
+
+.card-hover:hover {
+    background-color: #fafafa;
+}
+
 input.hidden {
     border: 0px;
     background-color: white !important;
