@@ -17,8 +17,11 @@ li.no-bullets {
     margin: 0;
     padding: 0;
 }
+.fa-pencil {
+    -webkit-appearance: none;
+}
 
-.inline{
+.inline {
     display: inline;
 }
 .small-padding {

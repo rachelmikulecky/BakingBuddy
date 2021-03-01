@@ -76,7 +76,7 @@ namespace BakingBuddy.Pages
         {
             Regex startsWithDigit = new Regex(@"^\d");
             // all valid volume values
-            Regex amount = new Regex(@"^(\d+\/\d+|\d+\.\d+|\d+)-(\d+\/\d+|\d+\.\d+|\d+)|\d+\/\d+|\d+\.\d+|to|-|\d+$");
+            Regex amount = new Regex(@"^((\d+\/\d+|\d+\.\d+|\d+)-(\d+\/\d+|\d+\.\d+|\d+)|\d+\/\d+|\d+\.\d+|to|-|\d+)$");
             Regex weight = new Regex(@"\((.*)g\s?\)", RegexOptions.IgnoreCase);
             Regex cup = new Regex(@"^cups?$", RegexOptions.IgnoreCase);
             Regex tbsp = new Regex(@"^((tablespoon)|(tbsp))s?$", RegexOptions.IgnoreCase);
