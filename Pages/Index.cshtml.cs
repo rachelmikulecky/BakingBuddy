@@ -47,7 +47,7 @@ namespace BakingBuddy.Pages
             UpdateRecipes();
             GetConversions();
 
-            Recipes = Recipes.Where(i => i.Contains(search ?? "", StringComparison.OrdinalIgnoreCase)).ToList();
+            Recipes = Recipes.Where(i => i.Contains(search?.Trim() ?? "", StringComparison.OrdinalIgnoreCase)).ToList();
             
             // If values are valid
             if (ingredient != null && weight > 0)

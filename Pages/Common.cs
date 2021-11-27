@@ -9,7 +9,7 @@ namespace BakingBuddy.Pages
 {
     public static class Common
     {
-        public const string VERSION = "1.0.3";
+        public const string VERSION = "1.0.4";
 
         public const string activeMinFormat = @"active: ";
         public const string inactiveMinFormat = @"inactive: ";
