@@ -17,10 +17,6 @@ li.no-bullets {
     margin: 0;
     padding: 0;
 }
-.fa-edit {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-}
 
 .inline {
     display: inline;
